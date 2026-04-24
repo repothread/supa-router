@@ -23,6 +23,10 @@ import { Typography } from '@douyinfe/semi-ui';
 import { getFooterHTML, getLogo, getSystemName } from '../../helpers';
 import { StatusContext } from '../../context/Status';
 
+const sourceRepositoryUrl = 'https://github.com/repothread/supa-router';
+const upstreamRepositoryUrl = 'https://github.com/QuantumNous/new-api';
+const agplLicenseUrl = 'https://www.gnu.org/licenses/agpl-3.0.html';
+
 const FooterBar = () => {
   const { t } = useTranslation();
   const [footer, setFooter] = useState(getFooterHTML());
@@ -39,6 +43,38 @@ const FooterBar = () => {
   };
 
   const currentYear = new Date().getFullYear();
+
+  const footerMeta = (
+    <div className='text-sm flex flex-wrap items-center justify-center md:justify-end gap-2'>
+      <a
+        href={sourceRepositoryUrl}
+        target='_blank'
+        rel='noopener noreferrer'
+        className='!text-semi-color-primary font-medium'
+      >
+        Source
+      </a>
+      <span className='!text-semi-color-text-2'>·</span>
+      <a
+        href={agplLicenseUrl}
+        target='_blank'
+        rel='noopener noreferrer'
+        className='!text-semi-color-primary font-medium'
+      >
+        AGPL v3.0
+      </a>
+      <span className='!text-semi-color-text-2'>·</span>
+      <span className='!text-semi-color-text-1'>Based on</span>
+      <a
+        href={upstreamRepositoryUrl}
+        target='_blank'
+        rel='noopener noreferrer'
+        className='!text-semi-color-primary font-medium'
+      >
+        New API
+      </a>
+    </div>
+  );
 
   const customFooter = useMemo(
     () => (
@@ -191,27 +227,15 @@ const FooterBar = () => {
         <div className='flex flex-col md:flex-row items-center justify-between w-full max-w-[1110px] gap-6'>
           <div className='flex flex-wrap items-center gap-2'>
             <Typography.Text className='text-sm !text-semi-color-text-1'>
-              © {currentYear} {systemName}. {t('版权所有')}
+              © {currentYear} {systemName}
             </Typography.Text>
           </div>
 
-          <div className='text-sm'>
-            <span className='!text-semi-color-text-1'>
-              {t('设计与开发由')}{' '}
-            </span>
-            <a
-              href='https://github.com/QuantumNous/new-api'
-              target='_blank'
-              rel='noopener noreferrer'
-              className='!text-semi-color-primary font-medium'
-            >
-              New API
-            </a>
-          </div>
+          {footerMeta}
         </div>
       </footer>
     ),
-    [logo, systemName, t, currentYear, isDemoSiteMode],
+    [logo, systemName, currentYear, isDemoSiteMode],
   );
 
   useEffect(() => {
@@ -227,19 +251,7 @@ const FooterBar = () => {
               className='custom-footer na-cb6feafeb3990c78 text-sm !text-semi-color-text-1'
               dangerouslySetInnerHTML={{ __html: footer }}
             ></div>
-            <div className='text-sm flex-shrink-0'>
-              <span className='!text-semi-color-text-1'>
-                {t('设计与开发由')}{' '}
-              </span>
-              <a
-                href='https://github.com/QuantumNous/new-api'
-                target='_blank'
-                rel='noopener noreferrer'
-                className='!text-semi-color-primary font-medium'
-              >
-                New API
-              </a>
-            </div>
+            <div className='flex-shrink-0'>{footerMeta}</div>
           </div>
         </footer>
       ) : (

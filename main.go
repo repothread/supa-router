@@ -2,11 +2,11 @@ package main
 
 import (
 	"bytes"
-	"embed"
 	"fmt"
 	"log"
 	"net/http"
 	"os"
+	"path/filepath"
 	"strconv"
 	"strings"
 	"time"
@@ -34,11 +34,36 @@ import (
 	_ "net/http/pprof"
 )
 
-//go:embed web/dist
-var buildFS embed.FS
-
-//go:embed web/dist/index.html
 var indexPage []byte
+
+func getSessionCookieSameSiteMode() http.SameSite {
+	switch strings.ToLower(strings.TrimSpace(os.Getenv("SESSION_COOKIE_SAME_SITE"))) {
+	case "lax":
+		return http.SameSiteLaxMode
+	case "none":
+		return http.SameSiteNoneMode
+	case "strict", "":
+		return http.SameSiteStrictMode
+	default:
+		common.SysLog("unknown SESSION_COOKIE_SAME_SITE, fallback to strict")
+		return http.SameSiteStrictMode
+	}
+}
+
+func loadIndexPage() {
+	distDir := common.ResolveFrontendDistDir()
+	if distDir == "" {
+		indexPage = nil
+		return
+	}
+	data, err := os.ReadFile(filepath.Join(distDir, "index.html"))
+	if err != nil {
+		common.SysError("failed to read frontend index.html: " + err.Error())
+		indexPage = nil
+		return
+	}
+	indexPage = data
+}
 
 func main() {
 	startTime := time.Now()
@@ -174,16 +199,17 @@ func main() {
 		Path:     "/",
 		MaxAge:   2592000, // 30 days
 		HttpOnly: true,
-		Secure:   false,
-		SameSite: http.SameSiteStrictMode,
+		Secure:   common.GetEnvOrDefaultBool("SESSION_COOKIE_SECURE", false),
+		SameSite: getSessionCookieSameSiteMode(),
 	})
 	server.Use(sessions.Sessions("session", store))
 
+	loadIndexPage()
 	InjectUmamiAnalytics()
 	InjectGoogleAnalytics()
 
 	// 设置路由
-	router.SetRouter(server, buildFS, indexPage)
+	router.SetRouter(server, indexPage)
 	var port = os.Getenv("PORT")
 	if port == "" {
 		port = strconv.Itoa(*common.Port)

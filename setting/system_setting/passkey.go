@@ -33,18 +33,18 @@ func init() {
 }
 
 func GetPasskeySettings() *PasskeySettings {
-	if defaultPasskeySettings.RPID == "" && ServerAddress != "" {
-		// 从ServerAddress提取域名作为RPID
-		// ServerAddress可能是 "https://newapi.pro" 这种格式
-		serverAddr := strings.TrimSpace(ServerAddress)
+	publicBaseURL := GetPublicWebBaseURL()
+	if defaultPasskeySettings.RPID == "" && publicBaseURL != "" {
+		// 从前端公开地址提取域名作为RPID
+		serverAddr := strings.TrimSpace(publicBaseURL)
 		if parsed, err := url.Parse(serverAddr); err == nil && parsed.Host != "" {
 			defaultPasskeySettings.RPID = parsed.Host
 		} else {
 			defaultPasskeySettings.RPID = serverAddr
 		}
 	}
-	if defaultPasskeySettings.Origins == "" || defaultPasskeySettings.Origins == "[]" {
-		defaultPasskeySettings.Origins = ServerAddress
+	if (defaultPasskeySettings.Origins == "" || defaultPasskeySettings.Origins == "[]") && publicBaseURL != "" {
+		defaultPasskeySettings.Origins = publicBaseURL
 	}
 	return &defaultPasskeySettings
 }

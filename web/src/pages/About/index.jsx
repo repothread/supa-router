@@ -27,6 +27,10 @@ import {
 } from '@douyinfe/semi-illustrations';
 import { useTranslation } from 'react-i18next';
 
+const sourceRepositoryUrl = 'https://github.com/repothread/supa-router';
+const upstreamRepositoryUrl = 'https://github.com/QuantumNous/new-api';
+const agplLicenseUrl = 'https://www.gnu.org/licenses/agpl-3.0.html';
+
 const About = () => {
   const { t } = useTranslation();
   const [about, setAbout] = useState('');
@@ -62,18 +66,51 @@ const About = () => {
   const customDescription = (
     <div style={{ textAlign: 'center' }}>
       <p>{t('可在设置页面设置关于内容，支持 HTML & Markdown')}</p>
+      <p>
+        Source:{' '}
+        <a
+          href={sourceRepositoryUrl}
+          target='_blank'
+          rel='noopener noreferrer'
+          className='!text-semi-color-primary'
+        >
+          {sourceRepositoryUrl}
+        </a>
+      </p>
+      <p>
+        Upstream:{' '}
+        <a
+          href={upstreamRepositoryUrl}
+          target='_blank'
+          rel='noopener noreferrer'
+          className='!text-semi-color-primary'
+        >
+          {upstreamRepositoryUrl}
+        </a>
+      </p>
+      <p>
+        License:{' '}
+        <a
+          href={agplLicenseUrl}
+          target='_blank'
+          rel='noopener noreferrer'
+          className='!text-semi-color-primary'
+        >
+          AGPL v3.0
+        </a>
+      </p>
       {t('New API项目仓库地址：')}
       <a
-        href='https://github.com/QuantumNous/new-api'
+        href={upstreamRepositoryUrl}
         target='_blank'
         rel='noopener noreferrer'
         className='!text-semi-color-primary'
       >
-        https://github.com/QuantumNous/new-api
+        {upstreamRepositoryUrl}
       </a>
       <p>
         <a
-          href='https://github.com/QuantumNous/new-api'
+          href={upstreamRepositoryUrl}
           target='_blank'
           rel='noopener noreferrer'
           className='!text-semi-color-primary'
@@ -120,7 +157,7 @@ const About = () => {
         </a>
         {t('授权，需在遵守')}
         <a
-          href='https://www.gnu.org/licenses/agpl-3.0.html'
+          href={agplLicenseUrl}
           target='_blank'
           rel='noopener noreferrer'
           className='!text-semi-color-primary'
