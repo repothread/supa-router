@@ -4,6 +4,83 @@
 
 This is an AI API gateway/proxy built with Go. It aggregates 40+ upstream AI providers (OpenAI, Claude, Gemini, Azure, AWS Bedrock, etc.) behind a unified API, with user management, billing, rate limiting, and an admin dashboard.
 
+## Fork & Upstream Synchronization
+
+This repository is maintained as a fork/customization of the upstream project at:
+
+- **Upstream source:** `https://github.com/QuantumNous/new-api`
+- **Local upstream remote:** `upstream` (fetch only; push URL should remain disabled)
+- **Fork remote:** `origin` (`git@github.com:repothread/model-router-api.git`)
+
+### Branch roles
+
+- `upstream/main` — source repository's main branch. Never commit to this; only fetch it.
+- `origin/main` / local `main` — mirror/sync branch for upstream `main`. Keep this branch as close to upstream as possible. Do **not** put project-specific custom changes here.
+- `origin/model-router-main` / local `model-router-main` — this fork's default and primary development branch. Project-specific changes belong here.
+- `feat/*`, `fix/*`, `chore/*` — short-lived work branches created from `model-router-main`. Merge them back into `model-router-main`.
+
+Current intended flow:
+
+```text
+upstream/main
+  -> main
+  -> model-router-main
+  -> feat/* or fix/*
+```
+
+### Daily development
+
+Before making project-specific changes, ensure you are not on `main`:
+
+```bash
+git switch model-router-main
+git switch -c feat/<short-description>
+```
+
+After finishing a feature branch, merge it into `model-router-main` and push:
+
+```bash
+git switch model-router-main
+git merge --no-ff feat/<short-description>
+git push origin model-router-main
+```
+
+### Syncing upstream updates
+
+Use `main` only as the upstream sync anchor. Prefer fast-forwarding it from `upstream/main`:
+
+```bash
+git fetch upstream --prune
+
+git switch main
+git merge --ff-only upstream/main
+git push origin main
+```
+
+Then update the project branch from `main`. Prefer rebase when `model-router-main` is not being concurrently rewritten by others:
+
+```bash
+git switch model-router-main
+git rebase main
+git push --force-with-lease origin model-router-main
+```
+
+If preserving shared branch history is more important than linear history, use merge instead:
+
+```bash
+git switch model-router-main
+git merge main
+git push origin model-router-main
+```
+
+### Safety rules for AI agents
+
+- Do not make project-specific commits on `main`; use `model-router-main` or a feature branch.
+- Do not push to `upstream`; its push URL should remain disabled.
+- Do not rewrite `main` unless explicitly asked and the upstream mirror strategy is being intentionally changed.
+- When syncing upstream, use `git merge --ff-only upstream/main` on `main` so accidental local divergence is caught early.
+- Before applying changes, check `git status --short --branch` and confirm the active branch is appropriate for the operation.
+
 ## Tech Stack
 
 - **Backend**: Go 1.22+, Gin web framework, GORM v2 ORM
