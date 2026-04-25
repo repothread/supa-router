@@ -30,6 +30,7 @@ import {
   handleApiError,
   processThinkTags,
   processIncompleteThinkTags,
+  buildApiUrl,
 } from '../../helpers';
 
 export const useApiRequest = (
@@ -185,7 +186,7 @@ export const useApiRequest = (
       setActiveDebugTab(DEBUG_TABS.REQUEST);
 
       try {
-        const response = await fetch(API_ENDPOINTS.CHAT_COMPLETIONS, {
+        const response = await fetch(buildApiUrl(API_ENDPOINTS.CHAT_COMPLETIONS), {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -313,7 +314,7 @@ export const useApiRequest = (
       }));
       setActiveDebugTab(DEBUG_TABS.REQUEST);
 
-      const source = new SSE(API_ENDPOINTS.CHAT_COMPLETIONS, {
+      const source = new SSE(buildApiUrl(API_ENDPOINTS.CHAT_COMPLETIONS), {
         headers: {
           'Content-Type': 'application/json',
           'New-Api-User': getUserIdFromLocalStorage(),

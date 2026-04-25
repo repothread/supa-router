@@ -26,19 +26,23 @@ import {
 import axios from 'axios';
 import { MESSAGE_ROLES } from '../constants/playground.constants';
 
-const baseURL = import.meta.env.VITE_REACT_APP_SERVER_URL
+export const API_BASE_URL = import.meta.env.VITE_REACT_APP_SERVER_URL
   ? import.meta.env.VITE_REACT_APP_SERVER_URL.replace(/\/$/, '')
   : '';
 
+export function buildApiUrl(path) {
+  if (!API_BASE_URL) return path;
+  return `${API_BASE_URL}${path.startsWith('/') ? path : `/${path}`}`;
+}
+
 export let API = axios.create({
-  baseURL,
+  baseURL: API_BASE_URL,
   withCredentials: true,
   headers: {
     'New-API-User': getUserIdFromLocalStorage(),
     'Cache-Control': 'no-store',
   },
 });
-
 
 function redirectToOAuthUrl(url, options = {}) {
   const { openInNewTab = false } = options;
@@ -51,7 +55,6 @@ function redirectToOAuthUrl(url, options = {}) {
 
   window.location.assign(targetUrl);
 }
-
 
 function patchAPIInstance(instance) {
   const originalGet = instance.get.bind(instance);
@@ -85,7 +88,7 @@ patchAPIInstance(API);
 
 export function updateAPI() {
   API = axios.create({
-    baseURL,
+    baseURL: API_BASE_URL,
     withCredentials: true,
     headers: {
       'New-API-User': getUserIdFromLocalStorage(),

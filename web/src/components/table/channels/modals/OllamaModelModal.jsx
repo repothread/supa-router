@@ -46,6 +46,7 @@ import {
 import {
   API,
   authHeader,
+  buildApiUrl,
   getUserIdFromLocalStorage,
   showError,
   showSuccess,
@@ -339,7 +340,7 @@ const OllamaModelModal = ({
         ...authHeaders,
       };
 
-      const response = await fetch('/api/channel/ollama/pull/stream', {
+      const response = await fetch(buildApiUrl('/api/channel/ollama/pull/stream'), {
         method: 'POST',
         headers: fetchHeaders,
         body: JSON.stringify({
