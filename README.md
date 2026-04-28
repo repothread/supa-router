@@ -54,6 +54,10 @@
 
 ## 📝 Project Description
 
+> [!NOTE]
+> Looking for fork-specific provenance and a summary of changes in this modified network version? See [FORK_NOTES.md](./FORK_NOTES.md).
+> Fork-specific sponsor and partner links are listed in [SPONSORS.md](./SPONSORS.md).
+
 > [!IMPORTANT]
 > - This project is for personal learning purposes only, with no guarantee of stability or technical support
 > - Users must comply with OpenAI's [Terms of Use](https://openai.com/policies/terms-of-use) and **applicable laws and regulations**, and must not use it for illegal purposes

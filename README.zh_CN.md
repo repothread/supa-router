@@ -54,6 +54,10 @@
 
 ## 📝 项目说明
 
+> [!NOTE]
+> 如需查看本 fork 的上游来源、修改版源码入口与改动摘要，请见 [FORK_NOTES.md](./FORK_NOTES.md)。
+> 本 fork 自有的赞助/合作链接请见 [SPONSORS.md](./SPONSORS.md)。
+
 > [!IMPORTANT]
 > - 本项目仅供个人学习使用，不保证稳定性，且不提供任何技术支持
 > - 使用者必须在遵循 OpenAI 的 [使用条款](https://openai.com/policies/terms-of-use) 以及**法律法规**的情况下使用，不得用于非法用途
